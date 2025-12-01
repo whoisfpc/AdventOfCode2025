@@ -4,6 +4,17 @@ import "core:fmt"
 import "core:os"
 import "core:strings"
 import "solutions/day01"
+import "solutions/day02"
+import "solutions/day03"
+import "solutions/day04"
+import "solutions/day05"
+import "solutions/day06"
+import "solutions/day07"
+import "solutions/day08"
+import "solutions/day09"
+import "solutions/day10"
+import "solutions/day11"
+import "solutions/day12"
 
 Solver :: #type proc(input: [][]u8) -> string
 
@@ -14,6 +25,17 @@ main :: proc() {
 		delete(solvers)
 	}
 	solvers["01"] = {day01.part1, day01.part2}
+	solvers["02"] = {day02.part1, day02.part2}
+	solvers["03"] = {day03.part1, day03.part2}
+	solvers["04"] = {day04.part1, day04.part2}
+	solvers["05"] = {day05.part1, day05.part2}
+	solvers["06"] = {day06.part1, day06.part2}
+	solvers["07"] = {day07.part1, day07.part2}
+	solvers["08"] = {day08.part1, day08.part2}
+	solvers["09"] = {day09.part1, day09.part2}
+	solvers["10"] = {day10.part1, day10.part2}
+	solvers["11"] = {day11.part1, day11.part2}
+	solvers["12"] = {day12.part1, day12.part2}
 
 	day := os.args[1]
 	part := os.args[2]
