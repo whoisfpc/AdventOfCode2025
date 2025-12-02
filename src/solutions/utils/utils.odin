@@ -14,3 +14,11 @@ destroy_2d :: proc(s2: $T/[][]$E) {
 	}
 	delete(s2)
 }
+
+pow10 :: proc(num: int) -> int {
+	ret := 1
+	for i in 0 ..< num {
+		ret *= 10
+	}
+	return ret
+}
