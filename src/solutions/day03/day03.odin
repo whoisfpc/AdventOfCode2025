@@ -26,6 +26,15 @@ part1 :: proc(input: [][]u8) -> string {
 part2 :: proc(input: [][]u8) -> string {
 	ans: int
 
+	for line in input {
+		nums := make_slice([]int, len(line))
+		defer delete(nums)
+		for c, i in line {
+			nums[i] = int(c - '0')
+		}
+		ans += find_joltage(nums, 12)
+	}
+
 	return fmt.aprintf("%v", ans)
 }
 
