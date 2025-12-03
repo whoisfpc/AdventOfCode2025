@@ -39,7 +39,8 @@ main :: proc() {
 
 	day := os.args[1]
 	part := os.args[2]
-	filename := fmt.aprintf("inputs/day%v.txt", day)
+	is_sample := len(os.args) > 3 && os.args[3] == "s"
+	filename := is_sample ? fmt.aprintf("inputs/samples/day%v.txt", day) : fmt.aprintf("inputs/day%v.txt", day)
 	defer delete(filename)
 
 	data, ok := os.read_entire_file_from_filename(filename)
