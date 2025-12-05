@@ -62,6 +62,7 @@ main :: proc() {
 	if solver_proc != nil {
 		ans := solver_proc(puzzle_data)
 		fmt.printfln("day%v part %v, ans is %v", day, part, ans)
+		delete(ans)
 	} else {
 		fmt.printfln("can not found solover for day%v part %v", day, part)
 	}
