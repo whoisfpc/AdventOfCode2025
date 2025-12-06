@@ -1,5 +1,6 @@
 package day06
 
+import "../utils"
 import "core:fmt"
 import "core:os"
 import "core:slice"
@@ -11,22 +12,22 @@ import "core:strings"
 part1 :: proc(input: [][]u8) -> string {
 	ans: int
 
-	line_count := len(input)
+	rows := len(input) - 1
 	cols := 0
-	mat := make([][dynamic]int, line_count - 1)
-	defer
-	{
-		for row in mat {
-			delete(row)
+	for c in input[rows] {
+		if c != ' ' {
+			cols += 1
 		}
-		delete(mat)
 	}
+	mat := utils.make_2d(cols, rows, int)
+	defer utils.destroy_2d(mat)
 	for line, i in input {
-		if (i == line_count - 1) {
+		if (i == rows) {
 			continue
 		}
 
 		idx0 := 0
+		nj := 0
 		for c, j in line {
 			ns: string
 			if j == len(line) - 1 {
@@ -45,26 +46,27 @@ part1 :: proc(input: [][]u8) -> string {
 
 			if len(ns) != 0 {
 				number, _ := strconv.parse_int(ns)
-				append(&mat[i], number)
+				mat[nj][i] = number
+				nj += 1
 			}
 		}
 	}
 
 	op_idx := -1
-	for c in input[line_count - 1] {
+	for c in input[rows] {
 		if c != ' ' {
 			op_idx += 1
 		}
 		if c == '*' {
 			res := 1
-			for row in mat {
-				res *= row[op_idx]
+			for n in mat[op_idx] {
+				res *= n
 			}
 			ans += res
 		}; if c == '+' {
 			res := 0
-			for row in mat {
-				res += row[op_idx]
+			for n in mat[op_idx] {
+				res += n
 			}
 			ans += res
 		}
