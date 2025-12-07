@@ -53,5 +53,41 @@ part1 :: proc(input: [][]u8) -> string {
 part2 :: proc(input: [][]u8) -> string {
 	ans: int
 
+	width := len(input[0])
+	cur_beams := make([]int, width)
+	next_beams := make([]int, width)
+	defer delete(cur_beams)
+	defer delete(next_beams)
+
+	for line, i in input {
+		if i == 0 {
+			s_idx := slice.linear_search(line, 'S') or_else panic("input line has no S")
+			cur_beams[s_idx] = 1
+			continue
+		}
+
+		for c, j in line {
+			if cur_beams[j] > 0 {
+				if (c == '^') {
+					l, r := j - 1, j + 1
+					if l >= 0 {
+						next_beams[l] += cur_beams[j]
+					}
+					if r < width {
+						next_beams[r] += cur_beams[j]
+					}
+				} else {
+					next_beams[j] += cur_beams[j]
+				}
+			}
+		}
+
+		cur_beams, next_beams = next_beams, cur_beams
+		slice.zero(next_beams)
+	}
+
+	ans = slice.reduce(cur_beams, 0, proc(a: int, b: int) -> int {
+		return a + b
+	})
 	return fmt.aprintf("%v", ans)
 }
