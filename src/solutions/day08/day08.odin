@@ -72,6 +72,49 @@ part1 :: proc(input: [][]u8) -> string {
 part2 :: proc(input: [][]u8) -> string {
 	ans: int
 
+	n := len(input)
+	points := make([][3]int, n)
+	defer delete(points)
+	pairs := make([dynamic]Pair)
+	defer delete(pairs)
+	ds := make([]int, n)
+	defer delete(ds)
+	for i in 0 ..< n {
+		ds[i] = i
+	}
+
+	for line, i in input {
+		ss := strings.split(transmute(string)line, ",")
+		defer delete(ss)
+		x, _ := strconv.parse_int(ss[0])
+		y, _ := strconv.parse_int(ss[1])
+		z, _ := strconv.parse_int(ss[2])
+		points[i] = {x, y, z}
+	}
+
+	for i in 0 ..< n - 1 {
+		for j in i + 1 ..< n {
+			diff := points[j] - points[i]
+			dist := diff.x * diff.x + diff.y * diff.y + diff.z * diff.z
+			append(&pairs, Pair{i, j, dist})
+		}
+	}
+
+	slice.sort_by(pairs[:], proc(a: Pair, b: Pair) -> bool {
+		return a.dist < b.dist
+	})
+
+	connects := 0
+	for p in pairs {
+		if ds_merge(ds, p.a, p.b) {
+			connects += 1
+			if connects == n - 1 {
+				ans = points[p.a].x * points[p.b].x
+				break
+			}
+		}
+	}
+
 	return fmt.aprintf("%v", ans)
 }
 
