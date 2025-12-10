@@ -1,5 +1,6 @@
 package day10
 
+import "../utils"
 import "core:container/queue"
 import "core:fmt"
 import "core:os"
@@ -20,6 +21,11 @@ part1 :: proc(input: [][]u8) -> string {
 
 part2 :: proc(input: [][]u8) -> string {
 	ans: int
+
+	for line in input {
+		ans += solve2(transmute(string)line)
+		break
+	}
 
 	return fmt.aprintf("%v", ans)
 }
@@ -82,6 +88,48 @@ solve1 :: proc(line: string) -> int {
 			}
 		}
 	}
+
+	return res
+}
+
+// resolve Ax = b linear equations
+solve2 :: proc(line: string) -> int {
+
+	light_end := strings.index_byte(line, ']')
+	joltage_start := strings.index_byte(line, '{')
+	// fmt.println(line[:light_end + 1])
+	// fmt.println(line[light_end + 2:joltage_start - 1])
+	// fmt.println(line[joltage_start:])
+	joltages := strings.split(line[joltage_start + 1:len(line) - 1], ",")
+	defer delete(joltages)
+	buttons := strings.split(line[light_end + 2:joltage_start - 1], " ")
+	defer delete(buttons)
+
+
+	n := len(joltages)
+	m := len(buttons)
+
+	mat := utils.make_2d(n, m + 1, int)
+	defer utils.destroy_2d(mat)
+	for joltage, i in joltages {
+		mat[i][m] = strconv.parse_int(joltage) or_else panic("bad joltage")
+	}
+
+	for b, j in buttons {
+		toggles := strings.split(b[1:len(b) - 1], ",")
+		defer delete(toggles)
+		for t in toggles {
+			idx := strconv.parse_int(t) or_else panic("bad int")
+			mat[idx][j] = 1
+		}
+	}
+
+	// fmt.println(n, m)
+	for row in mat {
+		fmt.println(row)
+	}
+
+	res := 0
 
 	return res
 }
